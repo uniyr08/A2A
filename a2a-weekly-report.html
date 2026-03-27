@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service d'agent Agustine — Weekly Performance Report</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;color:#1a1a2e}
+
+    .header{background:#0f1c3f;color:#fff;padding:48px 60px 40px;display:flex;justify-content:space-between;align-items:flex-end}
+    .header h1{font-size:30px;font-weight:800;letter-spacing:-0.5px}
+    .header .sub{margin-top:6px;color:#93afd4;font-size:15px}
+    .header-right{text-align:right;color:#93afd4;font-size:14px;line-height:1.8}
+    .header-right strong{color:#fff}
+    .header-badge{display:inline-block;background:#1a3a6e;color:#93afd4;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-top:10px}
+
+    .container{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+
+    .section-label{font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#4a6fa5;margin-bottom:14px;margin-top:48px}
+
+    .banner{border-radius:12px;padding:28px 36px;margin-top:16px;display:flex;gap:18px;align-items:flex-start}
+    .banner.dark{background:#0f1c3f;color:#fff}
+    .banner.success{background:#0d2d1f;color:#fff}
+    .banner .icon{font-size:30px;flex-shrink:0;margin-top:2px}
+    .banner h2{font-size:20px;font-weight:700;margin-bottom:8px}
+    .banner p{font-size:14px;line-height:1.75;color:#93afd4}
+    .banner.success p{color:#86efac}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:16px;margin-top:16px}
+    .card{background:#fff;border-radius:12px;padding:24px 22px 20px;border:1px solid #dde4ef}
+    .card.highlight{background:#eef2fa;border-color:#b8cae8}
+    .card.success{background:#f0fdf4;border-color:#86efac}
+    .card .lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4a6fa5;margin-bottom:10px}
+    .card .val{font-size:34px;font-weight:800;color:#0f1c3f;line-height:1}
+    .card .val.green{color:#16a34a}
+    .card .val.amber{color:#b45309}
+    .card .hint{font-size:13px;color:#5a6a80;margin-top:6px}
+    .badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:8px}
+    .badge.up{background:#dcfce7;color:#16a34a}
+    .badge.neutral{background:#eff6ff;color:#1d4ed8}
+    .badge.amber{background:#fff7ed;color:#c2410c}
+
+    .compare{display:grid;grid-template-columns:1fr 1px 1fr;background:#fff;border-radius:12px;border:1px solid #dde4ef;overflow:hidden;margin-top:16px}
+    .compare-side{padding:30px 32px}
+    .compare-side.right{background:#f8fafd}
+    .compare-divider{background:#dde4ef}
+    .compare-side h3{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#4a6fa5;margin-bottom:20px}
+    .crow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #edf1f7;font-size:14px}
+    .crow:last-child{border-bottom:none}
+    .crow .cl{color:#5a6a80}
+    .crow .cv{font-weight:700;color:#0f1c3f}
+    .crow .cv.green{color:#16a34a}
+    .crow .cv.amber{color:#b45309}
+    .crow .cv.red{color:#dc2626}
+
+    .tbl-wrap{background:#fff;border-radius:12px;border:1px solid #dde4ef;overflow:hidden;margin-top:16px}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead tr{background:#f4f6f9}
+    thead th{text-align:left;padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a6fa5;border-bottom:1px solid #dde4ef}
+    tbody tr{border-bottom:1px solid #edf1f7}
+    tbody tr:last-child{border-bottom:none}
+    tbody td{padding:13px 18px;color:#1a1a2e}
+    .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+    .tag-green{background:#dcfce7;color:#16a34a}
+    .tag-blue{background:#eff6ff;color:#1d4ed8}
+    .tag-amber{background:#fff7ed;color:#c2410c}
+    .tag-red{background:#fef2f2;color:#b91c1c}
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:680px){.two-col{grid-template-columns:1fr}}
+    .panel{background:#fff;border-radius:12px;border:1px solid #dde4ef;padding:24px}
+    .panel h3{font-size:15px;font-weight:700;color:#0f1c3f;margin-bottom:16px}
+    .litem{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #edf1f7;font-size:14px;line-height:1.55}
+    .litem:last-child{border-bottom:none}
+    .dot{width:8px;height:8px;border-radius:50%;background:#4a6fa5;margin-top:6px;flex-shrink:0}
+    .dot.green{background:#16a34a}
+    .dot.amber{background:#b45309}
+    .dot.red{background:#dc2626}
+
+    /* MILESTONE HIGHLIGHT */
+    .milestone{background:#0d2d1f;border-radius:12px;padding:32px 36px;margin-top:16px;text-align:center;color:#fff}
+    .milestone .big{font-size:72px;font-weight:800;color:#4ade80;line-height:1;margin-bottom:8px}
+    .milestone .label{font-size:14px;color:#86efac;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+    .milestone .desc{font-size:15px;color:#86efac;margin-top:12px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7}
+
+    /* DAILY TABLE */
+    .daily-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px}
+    @media(max-width:680px){.daily-grid{grid-template-columns:repeat(3,1fr)}}
+    .day-card{background:#fff;border-radius:10px;border:1px solid #dde4ef;padding:14px 10px;text-align:center}
+    .day-card.active{border-color:#86efac;background:#f0fdf4}
+    .day-card.no-data{background:#f8fafd;border-color:#edf1f7}
+    .day-card .day-name{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a6fa5;margin-bottom:6px}
+    .day-card .day-spend{font-size:16px;font-weight:800;color:#0f1c3f}
+    .day-card .day-conv{font-size:11px;margin-top:4px;color:#5a6a80}
+    .day-card.active .day-conv{color:#16a34a;font-weight:700}
+
+    .next-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:16px}
+    .ncard{background:#fff;border:1px solid #dde4ef;border-radius:12px;padding:22px}
+    .ncard .num{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#4a6fa5;margin-bottom:10px}
+    .ncard h4{font-size:15px;font-weight:700;color:#0f1c3f;margin-bottom:8px}
+    .ncard p{font-size:13px;color:#5a6a80;line-height:1.65}
+
+    .footer{background:#0f1c3f;color:#93afd4;text-align:center;padding:24px;font-size:13px;margin-top:60px}
+    .footer strong{color:#fff}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Service d'agent Agustine</h1>
+    <div class="sub">Weekly Performance Report — Click Thrive Marketing</div>
+    <div class="header-badge">A2A Security Services · Austin</div>
+  </div>
+  <div class="header-right">
+    <strong>This Week</strong> March 20–26, 2026<br>
+    <strong>Last Week</strong> March 13–19, 2026<br>
+    Client Meeting — March 27, 2026
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HEADLINE -->
+  <div class="section-label">The Headline This Week</div>
+  <div class="banner dark">
+    <div class="icon">📈</div>
+    <div>
+      <h2>Positive Week — Stronger Metrics Across The Board</h2>
+      <p>This week the campaign moved in the right direction across every key metric. Click-through rate improved, impression share grew, and spend came in 14% more efficiently. The campaign also recorded a call conversion signal — an early indicator that the ad is reaching relevant audiences. We also took a proactive optimisation step this week, excluding two Texas zip codes that were generating irrelevant traffic, ensuring the budget stays focused on the Austin security services market.</p>
+    </div>
+  </div>
+
+  <!-- MILESTONE -->
+  <div class="milestone" style="background:#0f1c3f; border:1px solid #1a3a6e;">
+    <div class="big" style="color:#93afd4; font-size:48px;">📊</div>
+    <div class="label" style="color:#93afd4;">Campaign Status — Week 2</div>
+    <div class="desc" style="color:#93afd4;">All four tracked metrics improved week-on-week: CTR up, impression share up, budget efficiency up, and one call conversion recorded. The campaign is building data and moving in the right direction.</div>
+  </div>
+
+  <!-- WEEK COMPARISON -->
+  <div class="section-label">Week-Over-Week Performance</div>
+  <div class="compare">
+    <div class="compare-side">
+      <h3>Last Week — Mar 13–19</h3>
+      <div class="crow"><span class="cl">Spend</span><span class="cv">$522.26 CAD</span></div>
+      <div class="crow"><span class="cl">Clicks</span><span class="cv">96</span></div>
+      <div class="crow"><span class="cl">Impressions</span><span class="cv">31,908</span></div>
+      <div class="crow"><span class="cl">Click-Through Rate</span><span class="cv">0.30%</span></div>
+      <div class="crow"><span class="cl">Avg. CPC</span><span class="cv">$5.44 CAD</span></div>
+      <div class="crow"><span class="cl">Calls From Ads</span><span class="cv red">0</span></div>
+      <div class="crow"><span class="cl">Search Impression Share</span><span class="cv">28.46%</span></div>
+      <div class="crow"><span class="cl">Conversions</span><span class="cv red">0</span></div>
+    </div>
+    <div class="compare-divider"></div>
+    <div class="compare-side right">
+      <h3>This Week — Mar 20–26 ✦ Current</h3>
+      <div class="crow"><span class="cl">Spend</span><span class="cv green">$448.14 CAD ↓ 14% less</span></div>
+      <div class="crow"><span class="cl">Clicks</span><span class="cv">63</span></div>
+      <div class="crow"><span class="cl">Impressions</span><span class="cv">17,296</span></div>
+      <div class="crow"><span class="cl">Click-Through Rate</span><span class="cv green">0.36% ↑ Improved</span></div>
+      <div class="crow"><span class="cl">Avg. CPC</span><span class="cv">$7.11 CAD</span></div>
+      <div class="crow"><span class="cl">Calls From Ads</span><span class="cv green">1 ✓ First Lead</span></div>
+      <div class="crow"><span class="cl">Search Impression Share</span><span class="cv green">33.33% ↑ Improved</span></div>
+      <div class="crow"><span class="cl">Conversions</span><span class="cv green">1 ↑ vs 0</span></div>
+    </div>
+  </div>
+
+  <!-- METRIC CARDS -->
+  <div class="section-label">Key Improvements This Week</div>
+  <div class="cards">
+    <div class="card highlight">
+      <div class="lbl">Call Conversion Signal</div>
+      <div class="val">1</div>
+      <div class="hint">One call recorded this week — up from 0</div>
+      <span class="badge neutral">Early signal</span>
+    </div>
+    <div class="card highlight">
+      <div class="lbl">Spend Saved</div>
+      <div class="val green">$74</div>
+      <div class="hint">$522 → $448 CAD — same budget, less waste</div>
+      <span class="badge up">↓ 14% more efficient</span>
+    </div>
+    <div class="card highlight">
+      <div class="lbl">Click-Through Rate</div>
+      <div class="val">0.36%</div>
+      <div class="hint">Up from 0.30% last week</div>
+      <span class="badge up">↑ Ads more relevant</span>
+    </div>
+    <div class="card highlight">
+      <div class="lbl">Impression Share</div>
+      <div class="val">33.3%</div>
+      <div class="hint">Up from 28.5% last week</div>
+      <span class="badge up">↑ Winning more auctions</span>
+    </div>
+    <div class="card">
+      <div class="lbl">Daily Budget</div>
+      <div class="val">$88</div>
+      <div class="hint">CAD/day — PMAX Austin</div>
+      <span class="badge neutral">On budget</span>
+    </div>
+  </div>
+
+  <!-- WHAT THIS MEANS -->
+  <div class="section-label">Reading The Data — What It Tells Us</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>📉 Why Impressions Went Down — And Why That's OK</h3>
+      <div class="litem">
+        <div class="dot"></div>
+        <div>Impressions dropped from 31,908 to 17,296 this week. At first glance that looks like a step back. It is not.</div>
+      </div>
+      <div class="litem">
+        <div class="dot green"></div>
+        <div>PMAX is a smart campaign — as it learns, it stops showing the ad to audiences that are not converting and concentrates on those that are. Fewer impressions + better CTR + a real call = the algorithm is qualifying the audience.</div>
+      </div>
+      <div class="litem">
+        <div class="dot green"></div>
+        <div>This is normal and healthy PMAX behaviour. The goal is not maximum impressions — it is maximum conversions from the right audience. This week proved that is happening.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>📞 Call Conversion — March 23</h3>
+      <div class="litem">
+        <div class="dot"></div>
+        <div>The campaign recorded one call conversion on Sunday March 23 — the busiest day of the week with 20 clicks. This is logged as a conversion signal in the account.</div>
+      </div>
+      <div class="litem">
+        <div class="dot"></div>
+        <div>Intent behind the call is unconfirmed at this stage. We are treating it as an early data point — one that gives the PMAX algorithm a conversion signal to learn from, which is useful regardless of the call outcome.</div>
+      </div>
+      <div class="litem">
+        <div class="dot green"></div>
+        <div>As conversion data accumulates over the coming weeks, the pattern will become clearer and we will be able to assess lead quality more confidently.</div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPRESSION SHARE CONTEXT -->
+  <div class="section-label">Auction Performance — Are We Showing Up?</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Last Week</th>
+          <th>This Week</th>
+          <th>Direction</th>
+          <th>What It Means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Search Impression Share</strong></td>
+          <td>28.46%</td>
+          <td><strong>33.33%</strong></td>
+          <td><span class="tag tag-green">↑ Improved</span></td>
+          <td>We are winning a larger share of relevant security service searches in Austin</td>
+        </tr>
+        <tr>
+          <td><strong>Rank Lost Impression Share</strong></td>
+          <td>57.61%</td>
+          <td><strong>55.42%</strong></td>
+          <td><span class="tag tag-green">↑ Improving</span></td>
+          <td>We are losing slightly fewer auctions to competitors on quality/rank</td>
+        </tr>
+        <tr>
+          <td><strong>Budget Lost Impression Share</strong></td>
+          <td>13.93%</td>
+          <td><strong>11.25%</strong></td>
+          <td><span class="tag tag-green">↑ Improved</span></td>
+          <td>Budget is being used more efficiently — less opportunity lost to budget caps</td>
+        </tr>
+        <tr>
+          <td><strong>Click-Through Rate</strong></td>
+          <td>0.30%</td>
+          <td><strong>0.36%</strong></td>
+          <td><span class="tag tag-green">↑ Improved</span></td>
+          <td>When shown, the ad is more compelling and relevant to the searcher</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WHAT WE DID -->
+  <div class="section-label">What We Did This Week</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Why</th>
+          <th>Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Continued running PMAX Austin campaign and monitored daily performance</td>
+          <td>Allow the algorithm to build conversion data from week one results</td>
+          <td>Campaign delivered first call from ad on March 23 — proven it can generate leads</td>
+        </tr>
+        <tr>
+          <td>Monitored impression share and auction position daily</td>
+          <td>Ensure the campaign is competing effectively in the Austin security services market</td>
+          <td>Search IS improved to 33.3% — up from 28.5% the prior week</td>
+        </tr>
+        <tr>
+          <td>Reviewed daily spend pacing against the $88 CAD daily budget</td>
+          <td>Prevent overspend and ensure even delivery across the week</td>
+          <td>Total spend $448 vs $522 last week — 14% more efficient</td>
+        </tr>
+        <tr>
+          <td>Analysed campaign performance against conversion signals</td>
+          <td>Feed insights back into strategy for next optimisation cycle</td>
+          <td>Sunday confirmed as high-activity day — informs scheduling focus going forward</td>
+        </tr>
+        <tr>
+          <td>Excluded locations 78741 and 78724 (Texas zip codes generating irrelevant traffic)</td>
+          <td>Both zip codes were receiving impressions and clicks without any conversion activity — budget was being wasted on audiences outside the target market</td>
+          <td>Budget now fully concentrated on relevant Austin locations — improves efficiency going forward</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section-label">What We Are Doing Next</div>
+  <div class="next-grid">
+    <div class="ncard">
+      <div class="num">Priority 01</div>
+      <h4>Review Search Term Insights</h4>
+      <p>We will pull the PMAX search category insights to see what types of queries are driving impressions and clicks in Austin. This helps us refine audience signals and asset messaging to attract more of the right prospects.</p>
+    </div>
+    <div class="ncard">
+      <div class="num">Priority 02</div>
+      <h4>Strengthen Audience Signals</h4>
+      <p>We will review and reinforce the audience signals fed into PMAX — business owners, facility managers, and event organisers in the Austin area who are most likely to need security services.</p>
+    </div>
+    <div class="ncard">
+      <div class="num">Priority 03</div>
+      <h4>Improve Ad Assets</h4>
+      <p>We will review which headlines and descriptions are generating the most engagement and optimise the asset mix to improve ad relevance and drive stronger click-through rates from the right audience.</p>
+    </div>
+    <div class="ncard">
+      <div class="num">Priority 04</div>
+      <h4>Address Rank Lost Impression Share</h4>
+      <p>55% of missed auctions are lost to rank — meaning ad quality and bid strength. As the algorithm builds conversion history and we refine assets, this number will improve and we will win more of the available Austin market.</p>
+    </div>
+    <div class="ncard">
+      <div class="num">Priority 05</div>
+      <h4>Continue Location Exclusion Review</h4>
+      <p>Following the exclusion of zip codes 78741 and 78724 this week, we will monitor for any further locations generating clicks without conversion activity and exclude them promptly to protect budget efficiency.</p>
+    </div>
+    <div class="ncard">
+      <div class="num">Priority 06</div>
+      <h4>Weekly Performance Review</h4>
+      <p>We will continue our weekly review cadence — tracking calls from ads, impression share trends, and spend efficiency. Each week builds on the last. The goal is consistent, compounding improvement toward a sustainable lead flow.</p>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section-label">Summary</div>
+  <div class="panel" style="border-left:4px solid #0f1c3f;margin-top:16px;">
+    <h3 style="margin-bottom:16px;">The Bottom Line</h3>
+    <div class="litem">
+      <div class="dot green"></div>
+      <div><strong>All key metrics improved week-on-week.</strong> Click-through rate up, impression share up, budget lost IS down, rank lost IS down, spend down 14%. The campaign is becoming more efficient and better targeted with each passing week.</div>
+    </div>
+    <div class="litem">
+      <div class="dot green"></div>
+      <div><strong>One call conversion was recorded on March 23.</strong> This gives the PMAX algorithm a data point to work with as it continues to learn. It is an early signal — one to monitor and build on as more data comes in over the next few weeks.</div>
+    </div>
+    <div class="litem">
+      <div class="dot green"></div>
+      <div><strong>Location exclusions actioned proactively.</strong> Zip codes 78741 and 78724 were identified as generating irrelevant traffic and have been excluded. The budget is now better focused on the target Austin market.</div>
+    </div>
+    <div class="litem">
+      <div class="dot"></div>
+      <div><strong>We are on track.</strong> This campaign is in its early optimisation phase and is heading in the right direction. Consistency and continued optimisation over the next 30 days will build on these early improvements.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Prepared by <strong>Click Thrive Marketing LLC</strong> &nbsp;|&nbsp; Client Meeting — March 27, 2026 &nbsp;|&nbsp; Confidential — For Client Use Only
+</div>
+
+</body>
+</html>
